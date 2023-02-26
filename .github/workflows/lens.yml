@@ -1,0 +1,18 @@
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [assigned, converted_to_draft, closed, opened, reopened, review_requested]
+  pull_request_review:
+    types: [submitted, dismissed]
+  issue_comment:
+    types: [created]
+
+jobs:
+  lensdx:
+    runs-on: ubuntu-latest
+    name: LensDX
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3

@@ -1,0 +1,23 @@
+name: 'LensDX'
+description: 'Conveniently create a deployment event in LensDX'
+branding:
+  icon: 'bar-chart-2'
+  color: 'black'
+inputs:
+  endpoint:
+    description: 'LensDX API endpoint, in the format: "https://mydomain.com/stagename"'
+    required: true
+    default: ''
+  api-key:
+    description: 'LensDX API token'
+    required: true
+    default: ''
+  product:
+    description: '(Optional) Product name, will default to repository name'
+    required: false
+    default: ${{ github.event.repository.name }}
+runs:
+  using: "composite"
+  steps:
+    - run: ${{ github.action_path }}/deployment.sh ${{ inputs.endpoint }} ${{ inputs.api-key }} ${{ inputs.product }}
+      shell: bash
