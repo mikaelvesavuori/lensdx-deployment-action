@@ -1,38 +1,30 @@
-#!/bin/bash
+#!/bin/bash -l
 
-#
-# DORAMETRIX: SCRIPT FOR DEPLOYMENT EVENTS
-# https://github.com/mikaelvesavuori/dorametrix
-#
-# This script makes it easy to run Dorametrix. We need to get the intermediate
-# commits between the latest production deployment and the current commit.
-# The latest deploy SHA is retrieved from the Dorametrix service.
-#
-# JSON solution based on comments in: https://gist.github.com/varemenos/e95c2e098e657c7688fd
-#
-
-set -e pipefail
+set -o pipefail
 
 echo "✨ Running Dorametrix deployment event script..."
 
 # Set variables
-if [ -z "$ENDPOINT" ]; then ENDPOINT="$1"; fi # Input from user when calling the action
+#if [ -z "$ENDPOINT" ]; then ENDPOINT="$1"; fi # Input from user when calling the action
+ENDPOINT="https://dorametrix.lensdx.app"
 echo "ℹ️ ENDPOINT --> $ENDPOINT"
 if [ -z "$ENDPOINT" ]; then echo "Dorametrix error: ENDPOINT is not set! Exiting..." && exit 1; fi
 
-if [ -z "$API_KEY" ]; then API_KEY="$2"; fi # Input from user when calling the action
-if [ -z "$API_KEY" ]; then echo "Dorametrix error: API_KEY is not set! Exiting..." && exit 1; fi
+#if [ -z "$API_KEY" ]; then API_KEY="$2"; fi # Input from user when calling the action
+API_KEY=""
+#if [ -z "$API_KEY" ]; then echo "Dorametrix error: API_KEY is not set! Exiting..." && exit 1; fi
 
-if [ -z "$PRODUCT" ]; then PRODUCT="$3"; fi # Input from user when calling the action
-echo "ℹ️ PRODUCT --> $PRODUCT"
-if [ -z "$PRODUCT" ]; then echo "Dorametrix error: PRODUCT is not set! Exiting..." && exit 1; fi
+#if [ -z "$REPO_NAME" ]; then REPO_NAME="$3"; fi # Input from user when calling the action
+REPO_NAME="$GITHUB_REPOSITORY"
+echo "ℹ️ REPO_NAME --> $REPO_NAME"
+if [ -z "$REPO_NAME" ]; then echo "Dorametrix error: REPO_NAME is not set! Exiting..." && exit 1; fi
 
 # Get current Git SHA
 CURRENT_GIT_SHA=$(git log --pretty=format:'%H' -n 1)
 echo "ℹ️ CURRENT_GIT_SHA --> $CURRENT_GIT_SHA"
 
 # Get commit ID of last production deployment
-LAST_PROD_DEPLOY=$(curl "$ENDPOINT/lastdeployment?product=$PRODUCT" -H "Authorization: $API_KEY" | jq '.id' -r)
+LAST_PROD_DEPLOY=$(curl "$ENDPOINT/lastdeployment?product=$REPO_NAME" -H "Authorization: $API_KEY" | jq '.id' -r)
 
 # If no LAST_PROD_DEPLOY is found, then very defensively assume that the first commit is most recent deployment
 if [[ -z "$LAST_PROD_DEPLOY" ]]; then
@@ -65,6 +57,6 @@ if [[ $CHANGES_LENGTH -eq 0 ]]; then
 fi
 
 # Call Dorametrix and create deployment event with Git changes
-curl -H "Content-Type: application/json" -H "Authorization: \"$API_KEY\"" -X POST "$ENDPOINT/event" -d '{ "eventType": "deployment", "product": "'$PRODUCT'", "changes": '"$CHANGES"' }'
+curl -H "Content-Type: application/json" -H "Authorization: $API_KEY" -X POST "$ENDPOINT/event" -d '{ "eventType": "deployment", "product": "'$REPO_NAME'", "changes": '"$CHANGES"' }'
 
 echo "✅ Dorametrix deployment script has finished successfully!"
