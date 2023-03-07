@@ -57,6 +57,6 @@ if [[ $CHANGES_LENGTH -eq 0 ]]; then
 fi
 
 # Call Dorametrix and create deployment event with Git changes
-#curl -H "Content-Type: application/json" -H "Authorization: $API_KEY" -X POST "$ENDPOINT/event" -d '{ "eventType": "deployment", "product": "'$REPO_NAME'", "changes": '"$CHANGES"' }'
+curl -H "Content-Type: application/json" -H 'Authorization: "$API_KEY"' -X POST "$ENDPOINT/event" -d '{ "eventType": "deployment", "product": "'$REPO_NAME'", "changes": '"$CHANGES"' }'
 
 echo "✅ Dorametrix deployment script has finished successfully!"
