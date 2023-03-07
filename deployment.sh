@@ -43,10 +43,10 @@ fi
 git log $LAST_PROD_DEPLOY..$CURRENT_GIT_SHA --pretty=format:'{%n  ^^^^id^^^^: ^^^^%H^^^^,%n  ^^^^timeCreated^^^^: ^^^^%ct^^^^%n  },' | sed 's/"/\\"/g' | sed 's/\^^^^/"/g' | sed "$ s/,$//" | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/ /g' | awk 'BEGIN { print("[") } { print($0) } END { print("]") }' >commits.json
 
 # Use TXT output to set variable with list of commits
-CHANGES=$(cat commits.json | jq '[.[] | { id: .id, timeCreated: .timeCreated }]')
-echo "ℹ️ CHANGES --> $CHANGES"
-CHANGES_LENGTH=$(echo $CHANGES | jq '. | length' -r)
-echo "ℹ️ CHANGES_LENGTH --> $CHANGES_LENGTH"
+#CHANGES=$(cat commits.json | jq '[.[] | { id: .id, timeCreated: .timeCreated }]')
+#echo "ℹ️ CHANGES --> $CHANGES"
+#CHANGES_LENGTH=$(echo $CHANGES | jq '. | length' -r)
+#echo "ℹ️ CHANGES_LENGTH --> $CHANGES_LENGTH"
 
 # Remove the scratch TXT file
 rm commits.json
