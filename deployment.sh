@@ -11,11 +11,11 @@ echo "ℹ️ ENDPOINT --> $ENDPOINT"
 if [ -z "$ENDPOINT" ]; then echo "Dorametrix error: ENDPOINT is not set! Exiting..." && exit 1; fi
 
 #if [ -z "$API_KEY" ]; then API_KEY="$2"; fi # Input from user when calling the action
-API_KEY=""
+API_KEY="7RaSwogUK7=t+6r_sp+f#go8r9Ph0d#Z"
 #if [ -z "$API_KEY" ]; then echo "Dorametrix error: API_KEY is not set! Exiting..." && exit 1; fi
 
 #if [ -z "$REPO_NAME" ]; then REPO_NAME="$3"; fi # Input from user when calling the action
-REPO_NAME="$GITHUB_REPOSITORY"
+REPO_NAME="SOMEORG/SOMEREPO"
 echo "ℹ️ REPO_NAME --> $REPO_NAME"
 if [ -z "$REPO_NAME" ]; then echo "Dorametrix error: REPO_NAME is not set! Exiting..." && exit 1; fi
 
@@ -24,12 +24,12 @@ CURRENT_GIT_SHA=$(git log --pretty=format:'%H' -n 1)
 echo "ℹ️ CURRENT_GIT_SHA --> $CURRENT_GIT_SHA"
 
 # Get commit ID of last production deployment
-LAST_PROD_DEPLOY=$(curl "$ENDPOINT/lastdeployment?product=$REPO_NAME" -H "Authorization: $API_KEY" | jq '.id' -r)
+LAST_PROD_DEPLOY=$(curl "$ENDPOINT/lastdeployment?product=$REPO_NAME" -H 'Authorization: "$API_KEY"' | jq '.id' -r)
 
 # If no LAST_PROD_DEPLOY is found, then very defensively assume that the first commit is most recent deployment
-if [[ -z "$LAST_PROD_DEPLOY" ]] || [[ "$LAST_PROD_DEPLOY" == "null" ]]; then
+if [[ -z "$LAST_PROD_DEPLOY" ]] || [[ "$LAST_PROD_DEPLOY" == "null" ]]; then
   echo "⚠️ Dorametrix warning: Could not find a value for LAST_PROD_DEPLOY. Setting LAST_PROD_DEPLOY to the value of the first commit."
-  LAST_PROD_DEPLOY=$(git rev-list --max-parents=0 HEAD) #git rev-list HEAD | tail -n 1
+  LAST_PROD_DEPLOY=$(git rev-list HEAD | tail -n 1) #git rev-list --max-parents=0 HEAD
 fi
 echo "ℹ️ LAST_PROD_DEPLOY --> $LAST_PROD_DEPLOY"
 
@@ -57,6 +57,6 @@ if [[ $CHANGES_LENGTH -eq 0 ]]; then
 fi
 
 # Call Dorametrix and create deployment event with Git changes
-curl -H "Content-Type: application/json" -H "Authorization: $API_KEY" -X POST "$ENDPOINT/event" -d '{ "eventType": "deployment", "product": "'$REPO_NAME'", "changes": '"$CHANGES"' }'
+#curl -H "Content-Type: application/json" -H "Authorization: $API_KEY" -X POST "$ENDPOINT/event" -d '{ "eventType": "deployment", "product": "'$REPO_NAME'", "changes": '"$CHANGES"' }'
 
 echo "✅ Dorametrix deployment script has finished successfully!"
