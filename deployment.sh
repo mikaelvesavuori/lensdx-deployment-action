@@ -27,7 +27,7 @@ echo "ℹ️ CURRENT_GIT_SHA --> $CURRENT_GIT_SHA"
 LAST_PROD_DEPLOY=$(curl "$ENDPOINT/lastdeployment?product=$REPO_NAME" -H "Authorization: $API_KEY" | jq '.id' -r)
 
 # If no LAST_PROD_DEPLOY is found, then very defensively assume that the first commit is most recent deployment
-if [[ -z "$LAST_PROD_DEPLOY" ]]; then
+if [[ -z "$LAST_PROD_DEPLOY" ]] || [[ "$LAST_PROD_DEPLOY" == "null" ]]; then
   echo "⚠️ Dorametrix warning: Could not find a value for LAST_PROD_DEPLOY. Setting LAST_PROD_DEPLOY to the value of the first commit."
   LAST_PROD_DEPLOY=$(git rev-list --max-parents=0 HEAD) #git rev-list HEAD | tail -n 1
 fi
