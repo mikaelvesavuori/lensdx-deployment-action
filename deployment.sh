@@ -11,7 +11,7 @@ echo "ℹ️ ENDPOINT --> $ENDPOINT"
 if [ -z "$ENDPOINT" ]; then echo "Dorametrix error: ENDPOINT is not set! Exiting..." && exit 1; fi
 
 #if [ -z "$API_KEY" ]; then API_KEY="$2"; fi # Input from user when calling the action
-API_KEY="7RaSwogUK7=t+6r_sp+f#go8r9Ph0d#Z"
+API_KEY="7RaSwogUK7=t6r_spfgo8r9Ph0dZ"
 #if [ -z "$API_KEY" ]; then echo "Dorametrix error: API_KEY is not set! Exiting..." && exit 1; fi
 
 #if [ -z "$REPO_NAME" ]; then REPO_NAME="$3"; fi # Input from user when calling the action
@@ -57,6 +57,6 @@ if [[ $CHANGES_LENGTH -eq 0 ]]; then
 fi
 
 # Call Dorametrix and create deployment event with Git changes
-curl -H "Content-Type: application/json" -H 'Authorization: "$API_KEY"' -X POST "$ENDPOINT/event" -d '{ "eventType": "deployment", "product": "'$REPO_NAME'", "changes": '"$CHANGES"' }'
+curl -X POST $ENDPOINT/event?authorization="$API_KEY" -d '{ "eventType": "deployment", "repo": "'$REPO_NAME'", "changes": '"$CHANGES"' }' -H "Content-Type: application/json"
 
-echo "✅ Dorametrix deployment script has finished successfully!"
+echo -e "\n✅ Dorametrix deployment script has finished successfully!"
