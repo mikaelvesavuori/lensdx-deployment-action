@@ -3,8 +3,12 @@ description: 'Conveniently create a deployment event in LensDX'
 branding:
   icon: 'bar-chart-2'
   color: 'black'
+inputs:
+  api-key: 1
+    description: 'LensDX API key'
+    required: true
 runs:
   using: "composite"
   steps:
-    - run: ${{ github.action_path }}/deployment.sh
+    - run: ${{ github.action_path }}/deployment.sh ${{ inputs.api-key }}
       shell: bash
