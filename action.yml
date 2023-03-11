@@ -4,7 +4,7 @@ branding:
   icon: 'bar-chart-2'
   color: 'black'
 inputs:
-  api-key: 1
+  api-key:
     description: 'LensDX API key'
     required: true
 runs:
