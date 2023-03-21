@@ -9,13 +9,13 @@ You need to set a required secret for an API key, then you are greenlit to just 
 ### Remember...
 
 - Always ensure you have secure settings regarding what actions you allow.
-- Note that Dorametrix will _not_ work without access to the Git history (i.e. `with.fetch-depth: 0`).
+- Note that LensDX will _not_ work without access to the Git history (i.e. `with.fetch-depth: 0`).
 
 ## Required input arguments
 
 ### `api-key`
 
-Dorametrix API token.
+LensDX API token.
 
 ## Environment variables the action uses
 
@@ -27,7 +27,7 @@ This action will use `${{ github.event.repository.name }}` to grab the repositor
 on: [push]
 
 jobs:
-  dorametrix:
+  lensdx-deployment:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
