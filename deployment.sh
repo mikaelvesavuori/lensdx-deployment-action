@@ -6,7 +6,6 @@ API_KEY="${1}"
 if [ -z "$API_KEY" ]; then echo "LensDX error: API key is not set! Exiting..." && exit 1; fi
 
 REPO_NAME="${2}"
-echo "ℹ️ REPO_NAME --> $REPO_NAME"
 if [ -z "$REPO_NAME" ]; then echo "LensDX error: REPO_NAME is not set! Exiting..." && exit 1; fi
 
 ENDPOINT="https://dorametrix.lensdx.app"
