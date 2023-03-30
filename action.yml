@@ -10,5 +10,5 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: ${{ github.action_path }}/deployment.sh ${{ inputs.api-key }} ${{ github.repository }}
+    - run: ${{ github.action_path }}/deployment.sh ${{ inputs.api-key }}
       shell: bash

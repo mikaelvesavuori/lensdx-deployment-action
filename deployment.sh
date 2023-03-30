@@ -5,8 +5,7 @@ set -o pipefail
 API_KEY="${1}"
 if [ -z "$API_KEY" ]; then echo "LensDX error: API key is not set! Exiting..." && exit 1; fi
 
-REPO_NAME="${2}"
-if [ -z "$REPO_NAME" ]; then echo "LensDX error: REPO_NAME is not set! Exiting..." && exit 1; fi
+REPO_NAME="$GITHUB_REPOSITORY"
 
 ENDPOINT="https://dorametrix.lensdx.app"
 
