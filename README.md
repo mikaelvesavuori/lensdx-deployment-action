@@ -1,6 +1,8 @@
 # LensDX Deployment Action
 
-An action to informs LensDX that you have deployed your service - helps keep your statistics up to date and in order!
+This Action informs LensDX that you have deployed your service - this helps keep your statistics up to date and in order!
+
+Note that the LensDX Deployment Action will _not_ work without access to the Git history (i.e. `with.fetch-depth: 0`).
 
 ## Setup and usage
 
@@ -8,18 +10,17 @@ You need to set a required secret for an API key, then you are greenlit to just 
 
 ### Remember...
 
-- Always ensure you have secure settings regarding what actions you allow.
-- Note that LensDX will _not_ work without access to the Git history (i.e. `with.fetch-depth: 0`).
+Always ensure you have secure settings regarding what actions you allow.
 
 ## Required input arguments
 
 ### `api-key`
 
-LensDX API token.
+LensDX API key.
 
 ## Environment variables the action uses
 
-This action will use `${{ github.event.repository.name }}` to grab the repository name.
+This action will use `${GITHUB_REPOSITORY}` to grab the repository name.
 
 ## An example of how to use this action in a workflow
 
@@ -40,5 +41,5 @@ jobs:
       - name: Run LensDX Deployment action
         uses: lensdx/lensdx-deployment-action@v0
         with:
-          api-key: ${{ secrets.LENSDX_DEPLOYMENT_API_KEY }} # Use whatever secret name you want!
+          api-key: ${{ secrets.LENSDX_DEPLOYMENT_API_KEY }}
 ```
